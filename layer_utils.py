@@ -173,6 +173,9 @@ def temp_link_root_top_layer(self):
                 ntree.links.remove(old_link)
 
         for i in layer_list:
+            # skip folder since they have no real existence as nodes
+            if i.layer_type == "FOLDER":
+                continue
             if not i.node_tree:
                 ntree.links.new(nodes[mat.layer_shaders.diffuse].inputs[0], nodes[i.mix].outputs[0])
                 break
