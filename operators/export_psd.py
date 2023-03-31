@@ -101,22 +101,42 @@ class LAYER_OT_layer_export_psd(bpy.types.Operator):
 
 # without PIL
 def resize_pixels(img, width, height):
-    orig_width, orig_height = img.size
-    xrange = lambda x: np.linspace(0, 1, x)
+    _width = int(width)
+    _height = int(height)
+    orig_width = int(img.size[0])
+    orig_height = int(img.size[1])
 
-    nppixels = np.array(img.pixels[:]) * 255
-    nppixels = nppixels.astype(np.uint8)
-    
-    np_flat_channels = [nppixels[c::img.channels] for c in range(img.channels)]
-    np_2d_channels = [np.reshape(c, (orig_height, orig_width)) for c in np_flat_channels]
-    
+    if orig_width == _width and orig_height == _height:
+        return convert_img(img)
+
+    pixels = img.pixels[:]
+
+    channels = int(img.channels)
     # nearest neighber?
-    np_2d_resuzed_channels = [
-        np.array([
-            [
-                channel2d[int(x * orig_width / width)][int(y * orig_height / height)] for x in range(width)
-            ] for y in range(height)
-        ], dtype=np.uint8) for channel2d in np_2d_channels
-    ]
+    np_resized_channel = []
+    for i in range(img.channels):
+        resized_channel = [0] * _width * _height
+        for k in range(_width * _height):
+            x = int(k % _width)
+            y = int(k / _width)
+            sx = int(x * orig_width / _width)
+            sy = int(y * orig_height / _height)
+            resized_channel[x + y * _width] = int(pixels[(sx + (orig_height - sy - 1) * orig_width) * channels] * 255)
+        
+        np_resized_channel.append(resized_channel)
+    
+    np_2d_channels = [np.reshape(np.array(c, dtype=np.uint8), (_height, _width)) for c in np_resized_channel]
+    return np_2d_channels
 
-    return np_2d_resuzed_channels
+def convert_img(img):
+    width = int(img.size[0])
+    height = int(img.size[1])
+    pixels = img.pixels[:]
+    channels = int(img.channels)
+    np_2d_channels = [
+        np.flipud(
+            np.array(np.array(pixels[i::channels]) * 255, dtype=np.uint8)
+                .reshape((height, width))
+        ) for i in range(channels)
+    ]
+    return np_2d_channels
