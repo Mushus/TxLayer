@@ -2,6 +2,11 @@
 
 Blender add-on to add layers to texture painting
 
+# Download
+
+see releases page:
+https://github.com/Mushus/TxLayer/releases
+
 # Contribution
 
 Contributions are welcome.
