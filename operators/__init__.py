@@ -37,6 +37,7 @@ from .op_brush import *
 from .op_image import *
 #
 from .new_layer_core import *
+from .export_psd import *
 
 classes = (
 LAYER_OT_node_viewer,
@@ -65,6 +66,7 @@ LAYER_OT_node_group_set_active,
 LAYER_OT_set_mask,
 LAYER_OT_layer_load_external_image,
 LAYER_OT_layer_read_psd,
+LAYER_OT_layer_export_psd,
 )
 
 
