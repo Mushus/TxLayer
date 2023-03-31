@@ -11,7 +11,7 @@ https://github.com/Mushus/TxLayer/releases
 
 Contributions are welcome.
 
-# development
+# Development
 
 required tools
 
