@@ -162,10 +162,21 @@ LAYER_PT_panel,
 LAYER_MT_AddonPreferences,
 )
 
+def launch_debug_server():
+    ptvsd_path = "C:\\Users\\Mushus\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages"
+    import sys
+    sys.path.append(ptvsd_path)
+
+    import ptvsd
+    ptvsd.enable_attach(address=('0.0.0.0', 5678))
+    ptvsd.wait_for_attach()
+
+
 def register():
     operators.register()
     ui.register()
     data.register()
+    launch_debug_server()
 
     for cls in classes:
         bpy.utils.register_class(cls)
