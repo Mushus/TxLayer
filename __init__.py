@@ -35,7 +35,7 @@ bl_info = {
     "name": "Tx Layer by Mushus",
     "description": "Layer functionality using nodes for texture paint",
     "author": "David DiGioia, Alexander Belyakov, Bookyakuno(ver0.0.3-), Mushus",
-    "version": (0, 0, 53),
+    "version": (0, 0, 54),
     "blender": (3, 2, 0),
     "location": "View3D > Texture Paint Mode > Tool > Layers",
     "warning": "",
