@@ -20,6 +20,7 @@ class LAYER_MT_layer_option(Menu):
         # layout.operator('layer_list.layer_add_folder', icon='FILE_FOLDER')
 
         layout.separator()
+        layout.operator('layer_list.import_psd', icon='IMAGE_DATA', text="Import PSD")
         layout.operator('layer_list.export_psd', icon='IMAGE_DATA', text="Export PSD")
 
 class LAYER_MT_node_change_texture_coord(Menu):

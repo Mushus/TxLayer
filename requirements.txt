@@ -1,2 +1,3 @@
 vendorize==0.3.0
 ptvsd==4.3.2
+fake-bpy-module-latest==20230331
