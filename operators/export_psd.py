@@ -1,7 +1,6 @@
 import os, bpy
 from .. import layer_utils
 from .._vendor import pytoshop
-from PIL import Image
 import numpy as np
 
 def get_layer_list(context):
