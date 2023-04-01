@@ -29,7 +29,7 @@ jobs:
       - name: Make zip
         run: |
           python-vendorize
-          zip -r TxLayer-v$NEW_VERSION.zip . -x '.git/*' '*__pycache__/*' '.github/*' '.gitignore' 'vendorize.toml'
+          zip -r TxLayer-v$NEW_VERSION.zip . -x '.git/*' '*__pycache__/*' '.github/*' '.gitignore' 'vendorize.toml' 'scripts/*'
       - name: Commit Release
         run: |
           git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
@@ -39,9 +39,10 @@ jobs:
           git commit -m "version $NEW_VERSION"
           git tag "v$NEW_VERSION"
           git push origin HEAD:${GITHUB_REF}
+          git push origin "refs/tags/v$NEW_VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
-        run: gh release create --prerelease --generate-notes "$(git describe --tags --abbrev=0)" TxLayer-v$NEW_VERSION.zip
+        run: gh release create --prerelease --generate-notes "v$NEW_VERSION" "TxLayer-v$NEW_VERSION.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
