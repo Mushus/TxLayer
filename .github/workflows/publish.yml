@@ -1,0 +1,47 @@
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New Version"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          NEW_VERSION=$(python scripts/publish.py $VERSION)
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        env:
+          VERSION: ${{ inputs.version }}
+      - name: Make zip
+        run: |
+          python-vendorize
+          zip -r hoge.zip . -x '.git/*' '*__pycache__/*' '.github/*' '.gitignore' 'vendorize.toml'
+      - name: Commit Release
+        run: |
+          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add __init__.py
+          git commit -m "version $NEW_VERSION"
+          git tag "v$NEW_VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        run: gh release create --generate-notes "$(git describe --tags --abbrev=0)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push release
+        run: git push origin HEAD:${GITHUB_REF}
