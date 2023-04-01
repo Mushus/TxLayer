@@ -25,7 +25,7 @@ def print_version(content):
 edit_target_path = os.path.join(os.path.dirname(__file__), '..', '__init__.py')
 encoding = "utf-8"
 
-with open(edit_target_path, 'r', encoding=encoding) as reader:
+with open(edit_target_path, 'r', encoding=encoding, newline='') as reader:
     content = reader.read()
 
 if target != -1:
@@ -33,5 +33,5 @@ if target != -1:
 
 print_version(content)
 
-with open(edit_target_path, 'w', encoding=encoding) as writer:
+with open(edit_target_path, 'w', encoding=encoding, newline='') as writer:
     writer.write(content)
