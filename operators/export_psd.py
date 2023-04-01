@@ -3,8 +3,8 @@ from .. import layer_utils
 from .._vendor import pytoshop
 import numpy as np
 
-def get_layer_list(context):
-    obj = bpy.context.object
+def get_layer_list(context: bpy.types.Context) -> bpy.types.Collection:
+    obj = context.object
     mat = obj.active_material
     layer_list = mat.layer_list
     return layer_list
@@ -59,9 +59,9 @@ class LAYER_OT_layer_export_psd(bpy.types.Operator):
         filepath_folder, filepath_name = os.path.split(self.filepath)
         filepath_nameonly, filepath_ext = os.path.splitext(filepath_name)
         if(filepath_ext != '.psd'):
-            self.report({'ERROR'}, "'%s' is not PSD file." % self.filepath)
-            return {"FINISHED"}
-            # return {'CANCELLED'}
+            filepath_name += ".psd"
+            filepath_nameonly += filepath_ext
+            filepath_ext = ".psd"
 
         w = self.width
         h = self.height
@@ -93,8 +93,8 @@ class LAYER_OT_layer_export_psd(bpy.types.Operator):
             )
             psd.layer_and_mask_info.layer_info.layer_records.append(layer)
 
-        with open(self.filepath, 'wb') as fd2:
-            psd.write(fd2)
+        with open(self.filepath, 'wb') as fd:
+            psd.write(fd)
 
         return {"FINISHED"}
 
